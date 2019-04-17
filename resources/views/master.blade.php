@@ -3,7 +3,8 @@
 
 <head>
 
-    <title>Bootstrap Responsive Web Template</title>
+    <title>Courier Tracking Notification &middot; Get Notified Now!</title>
+    <meta name="description" content="Never missed any updates of your item by receiving through email! Currently only Poslaju and Skynet are supported.">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <!-- CSS Files -->
@@ -17,8 +18,8 @@
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" media="screen">
 
     <!-- Google Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans:100,300,400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Alegreya+Sans:100,300,400,700' rel='stylesheet' type='text/css'>
 </head>
 
 <body data-spy="scroll" data-target="#navbar-scroll">
