@@ -22,6 +22,14 @@ Route::group([
 ], function () {
     Route::post('submit', 'TrackingController@submit')->name('submit');
     Route::get('{code}/view', 'TrackingController@view')->name('view');
+});
 
-
+Route::any('register', function () {
+    abort(404);
+});
+Route::any('password/reset', function () {
+    abort(404);
+});
+Route::any('password/email', function () {
+    abort(404);
 });
