@@ -34,7 +34,7 @@
                             <p>Never missed any updates of your item by receiving through email! Currently only Poslaju and Skynet are supported.</p>
                         </div>
                         <div class="head-btn wow fadeInLeft">
-                            <a href="#" class="btn-primary">How It Works</a>
+                            <a href="#" class="btn-primary">Services</a>
                             <a href="#" class="btn-default">Track Now</a>
                         </div>
                         <br />

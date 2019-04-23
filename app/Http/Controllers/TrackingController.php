@@ -53,7 +53,13 @@ class TrackingController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $tracking_code = TrackingCode::where('code', $request->code)->first();
+        $tracking_code = TrackingCode::where('code', $request->code)->with('histories', 'courier')->first();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'tracking_code' => $tracking_code,
+            ], 200);
+        }
         return view('view')
         ->with([
             'tracking_code' => $tracking_code,
