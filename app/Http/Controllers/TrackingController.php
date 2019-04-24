@@ -17,7 +17,7 @@ class TrackingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'courier_id' => 'required|exists:couriers,id',
-            // 'code' => 'required|unique:tracking_codes,code',
+            'code' => 'required|string|max:30',
             'email' => 'nullable|email',
         ]);
 
@@ -36,6 +36,12 @@ class TrackingController extends Controller
             $this->checkPoslaju($tracking_code);
         } else if ($tracking_code->courier_id == 3) {
             $this->checkSkynet($tracking_code);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'tracking_code' => $tracking_code->load('courier', 'histories'),
+            ], 200);
         }
 
         return redirect()->route('tracking.view', $tracking_code->code)->with('success', 'Tracking has been registered');
