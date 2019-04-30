@@ -44,22 +44,21 @@ class TrackingController extends Controller
             ], 200);
         }
 
-        return redirect()->route('tracking.view', $tracking_code->code)->with('success', 'Tracking has been registered');
+        return redirect()->route('tracking.view', $tracking_code->tracking_code_id)->with('success', 'Tracking has been registered');
     }
 
     public function view(Request $request)
     {
-        $validator = Validator::make([
-            'code' => $request->code,
-        ], [
-            'code' => 'required|exists:tracking_codes',
-        ]);
+        $tracking_code = TrackingCode::whereHashId('code', $request->code)->with('histories', 'courier')->first();
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        if (!$tracking_code) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Tracking code not found',
+                ], 404);
+            }
+            abort(404);
         }
-
-        $tracking_code = TrackingCode::where('code', $request->code)->with('histories', 'courier')->first();
 
         if ($request->wantsJson()) {
             return response()->json([
