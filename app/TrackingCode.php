@@ -43,9 +43,10 @@ class TrackingCode extends Model
 
     public function scopeWhereHashId($query, $id)
     {
-        $id = Hashids::connection(TrackingCode::class)->decode($id);
-        if ($id) {
-            return $query->where('id', $id[0]);
+        $decodedId = Hashids::connection(TrackingCode::class)->decode($id);
+
+        if ($decodedId) {
+            return $query->where('id', $decodedId[0]);
         } else {
             return $query;
         }

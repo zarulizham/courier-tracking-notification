@@ -49,7 +49,7 @@ class TrackingController extends Controller
 
     public function view(Request $request)
     {
-        $tracking_code = TrackingCode::whereHashId('code', $request->code)->with('histories', 'courier')->first();
+        $tracking_code = TrackingCode::whereHashId($request->code)->with('histories', 'courier')->first();
 
         if (!$tracking_code) {
             if ($request->wantsJson()) {
