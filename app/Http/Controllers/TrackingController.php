@@ -215,6 +215,12 @@ class TrackingController extends Controller
             if ($tracking_history->wasRecentlyCreated) {
                 $sendEmail = true;
             }
+
+            if (strpos($process, 'Delivered') !== false) {
+                $tracking_code->update([
+                    'completed_at' => $date->format('Y-m-d H:i:s'),
+                ]);
+            }
         }
 
         if ($tracking_code->email && $sendEmail) {
