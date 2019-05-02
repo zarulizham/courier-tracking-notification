@@ -27,11 +27,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('tracking:check')
             ->everyFiveMinutes()
             ->between("05:00", "21:00")
-            ->appendOutputTo(storage_path("logs/".date("Ymd_H_").'tracking_check.log'));
+            ->appendOutputTo(storage_path("logs/tracking/".date("Ymd_H_").'tracking_check.log'));
 
         $schedule->command('tracking:remove')
             ->dailyAt("06:00")
-            ->appendOutputTo(storage_path("logs/".date("Ymd_H_").'tracking_remove.log'));
+            ->appendOutputTo(storage_path("logs/tracking/".date("Ymd_H_").'tracking_remove.log'));
     }
 
     /**
