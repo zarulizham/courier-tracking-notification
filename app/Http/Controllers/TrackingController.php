@@ -226,7 +226,7 @@ class TrackingController extends Controller
 
             if (strpos($description, 'Delivered') !== false) {
                 $tracking_code->update([
-                    'completed_at' => $date->format('Y-m-d H:i:s'),
+                    'completed_at' => $carbonDate->format('Y-m-d H:i:s'),
                 ]);
             }
         }
