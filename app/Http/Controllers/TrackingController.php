@@ -224,7 +224,7 @@ class TrackingController extends Controller
                 $sendEmail = true;
             }
 
-            if (strpos($process, 'Delivered') !== false) {
+            if (strpos($description, 'Delivered') !== false) {
                 $tracking_code->update([
                     'completed_at' => $date->format('Y-m-d H:i:s'),
                 ]);
