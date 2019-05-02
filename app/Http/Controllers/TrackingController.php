@@ -195,7 +195,13 @@ class TrackingController extends Controller
                 $carbonDate = Carbon::createFromFormat('j M Y g:iA', $date.' '.$time);
                 $previousDate = $date;
             } catch (\Exception $e) {
-                $carbonDate = Carbon::createFromFormat('j M Y g:iA', $previousDate.' '.$time);
+	            try {
+		            $date = trim(preg_replace('/\s+/', '', $tr->parentNode->previousSibling->nodeValue));
+		            $carbonDate = Carbon::createFromFormat('j M Y g:iA', $date.' '.$time);
+		            $previousDate = $date;
+	            } catch(\Exception $e) {
+	                $carbonDate = Carbon::createFromFormat('j M Y g:iA', $previousDate.' '.$time);
+	            }
             }
 
             $tracking_history = TrackingHistory::updateOrCreate([
