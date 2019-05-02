@@ -51,6 +51,8 @@ class TrackingCheck extends Command
 
             if ($tracking_code->courier_id == 1) {
                 $trackingController->checkPoslaju($tracking_code);
+            } else if ($tracking_code->courier_id == 3) {
+                $trackingController->checkSkynet($tracking_code);
             }
 
             $tracking_code->update([
