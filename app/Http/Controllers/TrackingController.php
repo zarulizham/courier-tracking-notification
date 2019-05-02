@@ -161,7 +161,6 @@ class TrackingController extends Controller
         $patern = '#<body onload="(.*?)">(.*?)</body>#';
         preg_match_all($patern, $contents, $parsed);
 
-        // dd($parsed);
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $internalErrors = libxml_use_internal_errors(true);
         $dom->loadHTML($parsed[0][0]);
@@ -173,10 +172,23 @@ class TrackingController extends Controller
         $sendEmail = false;
         $previousDate = NULL;
         foreach ($trs as $key => $tr) {
-            $description       = $tr->childNodes[1]->childNodes[1]->childNodes[1]->childNodes[3]->childNodes[1]->childNodes[1]->childNodes[1]->nodeValue;
-            $event = $tr->childNodes[1]->childNodes[1]->childNodes[1]->childNodes[3]->childNodes[1]->childNodes[1]->childNodes[3]->nodeValue;
+
+            $description = '';
+            $event = '';
+            try {
+                $description       = $tr->childNodes[1]->childNodes[1]->childNodes[1]->childNodes[3]->childNodes[1]->childNodes[1]->childNodes[1]->nodeValue;
+                $event = $tr->childNodes[1]->childNodes[1]->childNodes[1]->childNodes[3]->childNodes[1]->childNodes[1]->childNodes[3]->nodeValue;
+            } catch (\Exception $e) {
+                $description = $tr->childNodes[1]->childNodes[1]->childNodes[0]->childNodes[2]->childNodes[1]->childNodes[0]->childNodes[0]->nodeValue; // for server
+                $event = $tr->childNodes[1]->childNodes[1]->childNodes[0]->childNodes[2]->childNodes[1]->childNodes[0]->childNodes[2]->nodeValue;
+            }
 
             $date = trim(preg_replace('/\s+/', ' ', $tr->previousSibling->previousSibling->parentNode->previousSibling->previousSibling->nodeValue));
+
+			if ($date == '') {
+				$date = trim(preg_replace('/\s+/', ' ', $tr->previousSibling->previousSibling->parentNode->previousSibling->nodeValue));
+			}
+
             $time = trim(preg_replace('/\s+/', ' ', $tr->previousSibling->previousSibling->nodeValue));
 
             try {
