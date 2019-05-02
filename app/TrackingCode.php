@@ -31,6 +31,11 @@ class TrackingCode extends Model
         return $this->hasMany('App\TrackingHistory', 'tracking_code_id', 'id')->orderBy('history_date_time', 'DESC');
     }
 
+    public function latestHistory()
+    {
+        return $this->hasOne('App\TrackingHistory', 'tracking_code_id', 'id')->orderBy('history_date_time', 'DESC');
+    }
+
     public function courier()
     {
         return $this->belongsTo('App\Courier', 'courier_id', 'id');

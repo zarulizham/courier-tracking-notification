@@ -7,6 +7,11 @@ use App\TrackingCode;
 use App\TrackingHistory;
 use App\Mail\TrackingDetails;
 use Carbon\Carbon;
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use LaravelFCM\Message\Topics;
+use FCM;
 use GuzzleHttp\Client;
 use Mail;
 use Validator;
@@ -134,10 +139,13 @@ class TrackingController extends Controller
             }
         }
 
-        if ($tracking_code->email && $sendEmail) {
-            if (filter_var($tracking_code->email, FILTER_VALIDATE_EMAIL)) {
-                Mail::to($tracking_code->email)->send(new TrackingDetails($tracking_code));
+        if ($sendEmail) {
+            if ($tracking_code->email) {
+                if (filter_var($tracking_code->email, FILTER_VALIDATE_EMAIL)) {
+                    Mail::to($tracking_code->email)->send(new TrackingDetails($tracking_code));
+                }
             }
+            $this->fcm($tracking_code);
         }
     }
 
@@ -223,10 +231,34 @@ class TrackingController extends Controller
             }
         }
 
-        if ($tracking_code->email && $sendEmail) {
-            if (filter_var($tracking_code->email, FILTER_VALIDATE_EMAIL)) {
-                Mail::to($tracking_code->email)->send(new TrackingDetails($tracking_code));
+        if ($sendEmail) {
+            if ($tracking_code->email) {
+                if (filter_var($tracking_code->email, FILTER_VALIDATE_EMAIL)) {
+                    Mail::to($tracking_code->email)->send(new TrackingDetails($tracking_code));
+                }
             }
+            $this->fcm($tracking_code);
         }
     }
+
+    public function fcm(TrackingCode $tracking_code)
+    {
+        $title = $tracking_code->courier->name.': '.$tracking_code->code;
+        $body = $tracking_code->latestHistory->description.' '.$body = $tracking_code->latestHistory->event;
+        $notificationBuilder = new PayloadNotificationBuilder($title);
+        $notificationBuilder->setBody($body)
+                            ->setSound('default');
+
+        $notification = $notificationBuilder->build();
+
+        $topic = new Topics();
+        $topic->topic($tracking_code->code);
+
+        $topicResponse = FCM::sendToTopic($topic, null, $notification, null);
+
+        $topicResponse->isSuccess();
+        $topicResponse->shouldRetry();
+        $topicResponse->error();
+    }
 }
+
