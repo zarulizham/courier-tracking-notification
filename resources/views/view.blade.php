@@ -1,6 +1,5 @@
 @extends('master')
 
-
 @section('content')
 <div id="services">
     <div class="container">
@@ -19,9 +18,9 @@
         <div class="row row-feat">
             <div class="col-md-12">
                 @includeWhen($tracking_code->courier_id == 1 || $tracking_code->courier_id == 3, 'details.poslaju', ['tracking_code' => $tracking_code])
+                @includeWhen($tracking_code->courier_id == 4, 'details.ninjavan', ['tracking_code' => $tracking_code])
             </div>
         </div>
     </div>
 </div>
-
 @endsection

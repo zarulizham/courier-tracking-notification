@@ -41,6 +41,8 @@ class TrackingController extends Controller
             $this->checkPoslaju($tracking_code);
         } else if ($tracking_code->courier_id == 3) {
             $this->checkSkynet($tracking_code);
+        } else if ($tracking_code->courier_id == 4) {
+            $this->checkNinjaVan($tracking_code);
         }
 
         if ($request->wantsJson()) {
@@ -238,6 +240,50 @@ class TrackingController extends Controller
                 }
             }
             $this->fcm($tracking_code);
+        }
+    }
+
+    public function checkNinjaVan(TrackingCode $tracking_code)
+    {
+        $sendEmail = false;
+        $client = new \GuzzleHttp\Client();
+        $request = $client->get('https://api.ninjavan.co/my/shipperpanel/app/tracking?&id='.$tracking_code->code);
+        try {
+            $response = json_decode($request->getBody(), true);
+            $events = $response['orders'][0]['events'];
+
+            foreach ($events as $key => $event) {
+                $date = Carbon::createFromTimestamp($event['time']/1000);
+
+                $tracking_history = TrackingHistory::updateOrCreate([
+                    'tracking_code_id' => $tracking_code->id,
+                    'history_date_time' => $date->format('Y-m-d H:i:s'),
+                ], [
+                    'description' => $event['description'],
+                    'event' => '',
+                ]);
+
+                if ($tracking_history->wasRecentlyCreated) {
+                    $sendEmail = true;
+                }
+
+                if (strpos($event['description'], 'Successfully delivered') !== false) {
+                    $tracking_code->update([
+                        'completed_at' => $date->format('Y-m-d H:i:s'),
+                    ]);
+                }
+            }
+
+            if ($sendEmail) {
+                if ($tracking_code->email) {
+                    if (filter_var($tracking_code->email, FILTER_VALIDATE_EMAIL)) {
+                        Mail::to($tracking_code->email)->send(new TrackingDetails($tracking_code));
+                    }
+                }
+                $this->fcm($tracking_code);
+            }
+        } catch(\Exception $e) {
+
         }
     }
 

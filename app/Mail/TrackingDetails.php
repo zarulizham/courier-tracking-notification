@@ -30,6 +30,10 @@ class TrackingDetails extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.tracking.details.poslaju');
+        if ($this->tracking_code->courier_id == 1 || $this->tracking_code->courier_id == 3) {
+            return $this->markdown('emails.tracking.details.poslaju');
+        } else if ($this->tracking_code->courier_id == 4) {
+            return $this->markdown('emails.tracking.details.ninjavan');
+        }
     }
 }
