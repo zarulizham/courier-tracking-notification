@@ -28,7 +28,6 @@ class Kernel extends ConsoleKernel
         $tracking_check_path = storage_path('logs/tracking-check/'.date('Ym/'));
         $tracking_remove_path = storage_path('logs/tracking-remove/'.date('Ym/'));
         if (!file_exists($tracking_check_path)) {
-            echo "Path not found".$tracking_check_path;
             File::makeDirectory($tracking_check_path, 0755, true, true);
         }
 
