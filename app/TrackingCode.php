@@ -4,7 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Mail\TrackingDetails;
+use FCM;
 use Hashids;
+use Mail;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use LaravelFCM\Message\Topics;
 
 class TrackingCode extends Model
 {
@@ -54,6 +59,35 @@ class TrackingCode extends Model
             return $query->where('id', $decodedId[0]);
         } else {
             return $query;
+        }
+    }
+
+    public function sendPushNotification()
+    {
+        $title = $this->courier->name.': '.$this->code;
+        $body = $this->latestHistory->description.' '.$body = $this->latestHistory->event;
+        $notificationBuilder = new PayloadNotificationBuilder($title);
+        $notificationBuilder->setBody($body)
+                            ->setSound('default');
+
+        $notification = $notificationBuilder->build();
+
+        $topic = new Topics();
+        $topic->topic($this->code);
+
+        $topicResponse = FCM::sendToTopic($topic, null, $notification, null);
+
+        $topicResponse->isSuccess();
+        $topicResponse->shouldRetry();
+        $topicResponse->error();
+    }
+
+    public function sendEmail()
+    {
+        if ($this->email) {
+            if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                Mail::to($this->email)->send(new TrackingDetails($this));
+            }
         }
     }
 

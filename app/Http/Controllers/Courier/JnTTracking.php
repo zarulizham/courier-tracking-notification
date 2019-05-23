@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Courier;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Client;
-use GuzzleHttp\Cookie\FileCookieJar;
+use App\Mail\TrackingDetails;
 use App\TrackingHistory;
 use App\TrackingCode;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\FileCookieJar;
 use File;
+use Mail;
 
 class JnTTracking extends Controller
 {
@@ -17,6 +19,7 @@ class JnTTracking extends Controller
     private $csrf_token;
     private $url = "https://www.jtexpress.my/track";
     private $cookie_path;
+    private $sendNotification = false;
 
     public function __construct(TrackingCode $tracking_code) {
         $this->tracking_code = $tracking_code;
@@ -114,6 +117,26 @@ class JnTTracking extends Controller
                 'event' => $dropPoint,
                 'city' => $city,
             ]);
-		}
+
+            if ($tracking_history->wasRecentlyCreated) {
+                $this->sendNotification = true;
+            }
+
+            if ($status == 'Delivered') {
+                $this->tracking_code->update([
+                    'completed_at' => $carbonDate->format('Y-m-d H:i:s'),
+                ]);
+            }
+        }
+
+        $this->attemptSendNotification();
+    }
+
+    public function attemptSendNotification()
+    {
+        if ($this->sendNotification) {
+            $this->tracking_code->sendEmail();
+            $this->tracking_code->sendPushNotification();
+        }
     }
 }

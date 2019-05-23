@@ -34,6 +34,8 @@ class TrackingDetails extends Mailable
             return $this->markdown('emails.tracking.details.poslaju');
         } else if ($this->tracking_code->courier_id == 4) {
             return $this->markdown('emails.tracking.details.ninjavan');
+        } else if ($this->tracking_code->courier_id == 5) {
+            return $this->markdown('emails.tracking.details.jnt');
         }
     }
 }

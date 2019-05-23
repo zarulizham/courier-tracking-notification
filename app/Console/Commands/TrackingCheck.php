@@ -55,6 +55,8 @@ class TrackingCheck extends Command
                 $trackingController->checkSkynet($tracking_code);
             } else if ($tracking_code->courier_id == 4) {
                 $trackingController->checkNinjaVan($tracking_code);
+            } else if ($tracking_code->courier_id == 5) {
+                $trackingController->checkJnT($tracking_code);
             }
 
             $tracking_code->update([
