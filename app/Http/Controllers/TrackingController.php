@@ -15,7 +15,7 @@ use FCM;
 use GuzzleHttp\Client;
 use Mail;
 use Validator;
-use App\Http\Controllers\Courier\JntTracking;
+use App\Http\Controllers\Courier\JnTTracking;
 
 class TrackingController extends Controller
 {
@@ -312,7 +312,7 @@ class TrackingController extends Controller
 
     public function checkJnT(TrackingCode $tracking_code)
     {
-        $jnt = new JntTracking($tracking_code);
+        $jnt = new JnTTracking($tracking_code);
         $jnt->get();
     }
 }
