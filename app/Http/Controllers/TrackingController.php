@@ -312,12 +312,7 @@ class TrackingController extends Controller
 
     public function checkJnT(TrackingCode $tracking_code)
     {
-        if (!$tracking_code) {
-            $tracking_code = TrackingCode::find(9);
-        }
-        $tracking_code = TrackingCode::find(9);
         $jnt = new JntTracking($tracking_code);
-
         $jnt->get();
     }
 }
