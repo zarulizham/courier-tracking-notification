@@ -9,16 +9,22 @@ use GuzzleHttp\Cookie\FileCookieJar;
 use App\TrackingHistory;
 use App\TrackingCode;
 use Carbon\Carbon;
+use File;
 
 class JnTTracking extends Controller
 {
     private $tracking_code;
     private $csrf_token;
     private $url = "https://www.jtexpress.my/track";
-    private $cookie_filename = 'jnt_cookies.txt';
+    private $cookie_path;
 
     public function __construct(TrackingCode $tracking_code) {
         $this->tracking_code = $tracking_code;
+        $this->cookie_path = storage_path("cookies/jnt_express.txt");
+
+        if (!storage_path("cookies")) {
+            File::makeDirectory(storage_path("cookies"), 0755, true, true);
+        }
     }
 
     public function get()
@@ -27,9 +33,9 @@ class JnTTracking extends Controller
         $this->getDetails();
     }
 
-    public function getToken() {
-
-        $cookieJar = new FileCookieJar($this->cookie_filename, TRUE);
+    public function getToken()
+    {
+        $cookieJar = new FileCookieJar($this->cookie_path, TRUE);
 
         $client = new Client([
             'cookies' => $cookieJar
@@ -55,7 +61,7 @@ class JnTTracking extends Controller
 
     public function getDetails()
     {
-        $cookieJar = new FileCookieJar($this->cookie_filename, TRUE);
+        $cookieJar = new FileCookieJar($this->cookie_path, TRUE);
 
         $headers = [
             'Accept' => 'text/xml,application/xml,application/xhtml+xml,',
@@ -89,12 +95,16 @@ class JnTTracking extends Controller
 
 			$dropPoint = $entry->childNodes[3]->childNodes[1]->nodeValue;
 			$city = $entry->childNodes[3]->childNodes[3]->nodeValue;
-			$city = str_replace("City :", '', $city);
-			$status = $entry->childNodes[3]->childNodes[5]->nodeValue;
+            $city = str_replace("City :", '', $city);
+            if (isset($entry->childNodes[3]->childNodes[5]->nodeValue)) {
+                $status = $entry->childNodes[3]->childNodes[5]->nodeValue;
+            }
+            try {
+                $status = $entry->childNodes[3]->childNodes[5]->nodeValue;
+            } catch (\Throwable $th) {
+                $status = '';
+            }
 
-            // echo($datetime); die;
-            // dump($date);
-            // dump($time);
             $carbonDate = Carbon::createFromFormat('m/d/Y H:i:s', $date.' '.$time);
             $tracking_history = TrackingHistory::updateOrCreate([
                 'tracking_code_id' => $this->tracking_code->id,
