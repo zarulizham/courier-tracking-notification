@@ -22,8 +22,6 @@ Route::group([
 ], function () {
     Route::post('submit', 'TrackingController@submit')->name('submit');
     Route::get('{code}/view', 'TrackingController@view')->name('view');
-
-    // Route::get('jnt', 'TrackingController@checkJnT')->name('view');
 });
 
 Route::any('register', function () {
