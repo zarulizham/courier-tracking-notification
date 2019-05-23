@@ -22,7 +22,7 @@ class JnTTracking extends Controller
         $this->tracking_code = $tracking_code;
         $this->cookie_path = storage_path("cookies/jnt_express.txt");
 
-        if (!storage_path("cookies")) {
+        if (!file_exists(storage_path("cookies/jnt_express.txt"))) {
             File::makeDirectory(storage_path("cookies"), 0755, true, true);
         }
     }
