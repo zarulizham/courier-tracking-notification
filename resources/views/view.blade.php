@@ -19,6 +19,7 @@
             <div class="col-md-12">
                 @includeWhen($tracking_code->courier_id == 1 || $tracking_code->courier_id == 3, 'details.poslaju', ['tracking_code' => $tracking_code])
                 @includeWhen($tracking_code->courier_id == 4, 'details.ninjavan', ['tracking_code' => $tracking_code])
+                @includeWhen($tracking_code->courier_id == 5, 'details.jnt', ['tracking_code' => $tracking_code])
             </div>
         </div>
     </div>

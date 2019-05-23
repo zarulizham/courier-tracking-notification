@@ -15,6 +15,7 @@ use FCM;
 use GuzzleHttp\Client;
 use Mail;
 use Validator;
+use App\Http\Controllers\Courier\JntTracking;
 
 class TrackingController extends Controller
 {
@@ -43,6 +44,8 @@ class TrackingController extends Controller
             $this->checkSkynet($tracking_code);
         } else if ($tracking_code->courier_id == 4) {
             $this->checkNinjaVan($tracking_code);
+        } else if ($tracking_code->courier_id == 5) {
+            $this->checkJnT($tracking_code);
         }
 
         if ($request->wantsJson()) {
@@ -305,6 +308,17 @@ class TrackingController extends Controller
         $topicResponse->isSuccess();
         $topicResponse->shouldRetry();
         $topicResponse->error();
+    }
+
+    public function checkJnT(TrackingCode $tracking_code)
+    {
+        if (!$tracking_code) {
+            $tracking_code = TrackingCode::find(9);
+        }
+        $tracking_code = TrackingCode::find(9);
+        $jnt = new JntTracking($tracking_code);
+
+        $jnt->get();
     }
 }
 

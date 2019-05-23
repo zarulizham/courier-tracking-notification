@@ -13,6 +13,7 @@ class TrackingHistory extends Model
         'tracking_code_id',
         'description',
         'event',
+        'city',
         'email_send_at',
         'history_date_time',
     ];

@@ -19,6 +19,10 @@ class CouriersTableSeeder extends Seeder
                 'name' => 'DHL',
             ], [
                 'name' => 'Skynet',
+            ], [
+                'name' => 'Ninja Van',
+            ], [
+                'name' => 'J&T Express',
             ],
         ];
 
