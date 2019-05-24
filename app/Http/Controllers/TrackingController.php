@@ -41,6 +41,11 @@ class TrackingController extends Controller
         });
 
         if ($validator->fails()) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => $validator->errors()->first(),
+                ], 400);
+            }
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
