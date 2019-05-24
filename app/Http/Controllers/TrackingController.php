@@ -27,16 +27,16 @@ class TrackingController extends Controller
             'email' => 'nullable|email',
         ]);
 
-        $validator->sometimes('code', 'digits:13', function($input) {
+        $validator->sometimes('code', 'size:13', function($input) {
             return $input->courier_id == 1;
         });
-        $validator->sometimes('code', 'digits:11', function($input) {
+        $validator->sometimes('code', 'size:11', function($input) {
             return $input->courier_id == 3;
         });
-        $validator->sometimes('code', 'digits:18', function($input) {
+        $validator->sometimes('code', 'size:18', function($input) {
             return $input->courier_id == 4;
         });
-        $validator->sometimes('code', 'digits:12', function($input) {
+        $validator->sometimes('code', 'size:12', function($input) {
             return $input->courier_id == 5;
         });
 
