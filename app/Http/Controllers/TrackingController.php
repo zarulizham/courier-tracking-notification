@@ -23,9 +23,22 @@ class TrackingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'courier_id' => 'required|exists:couriers,id',
-            'code' => 'required|string|max:30',
+            'code' => 'required|string',
             'email' => 'nullable|email',
         ]);
+
+        $validator->sometimes('code', 'digits:13', function($input) {
+            return $input->courier_id == 1;
+        });
+        $validator->sometimes('code', 'digits:11', function($input) {
+            return $input->courier_id == 3;
+        });
+        $validator->sometimes('code', 'digits:18', function($input) {
+            return $input->courier_id == 4;
+        });
+        $validator->sometimes('code', 'digits:12', function($input) {
+            return $input->courier_id == 5;
+        });
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -316,4 +329,3 @@ class TrackingController extends Controller
         $jnt->get();
     }
 }
-
