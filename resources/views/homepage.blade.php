@@ -103,6 +103,9 @@
                 <p>We receive and store certain types of information about your use of the Website or Mobile Application when you use the Website or Mobile Application. Our purpose is to allow the Website or Mobile Application to work correctly, to allow us to provide our services, to evaluate use of the Website, for marketing purposes and to personalize and enhance your interaction with Courier Notify. Some examples include:</p>
                 <p>We may collect technical information such as your IP address, the address of a referring website or application, the type of web browser or mobile device you use, your operating system, your Internet Service Provider and the path you take through the Website; </p>
                 <p>When you purchase services, we collect information about the transaction, such as services details and the date of the purchase/return.</p>
+
+                <h4>Changes to this Privacy Policy</h4>
+                <p>Courier Notify may change the Privacy Policy from time to time. We will inform you by posting the revised Privacy Policy on the Website. Please check our Privacy Policy periodically for changes. We will post the date the Privacy Policy was last updated at the top of the Privacy Policy. The changes will go into effect on the "Last Updated" date shown in the revised Privacy Policy. By continuing to use the Website, you consent to the revised Privacy Policy.</p>
             </div>
         </div>
     </div>
