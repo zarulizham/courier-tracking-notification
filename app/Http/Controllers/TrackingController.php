@@ -27,7 +27,7 @@ class TrackingController extends Controller
             'email' => 'nullable|email',
         ]);
 
-        $validator->sometimes('code', 'min:12|max:14', function($input) {
+        $validator->sometimes('code', 'min:12|max:16', function($input) {
             return $input->courier_id == 1;
         });
         $validator->sometimes('code', 'size:11', function($input) {
